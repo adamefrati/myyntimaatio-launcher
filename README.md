@@ -6,3 +6,4 @@ Myyntimaatio Launcher plugin for Wordpress to install all the required and recom
 Upload `myyntimaatio-launcher.zip` from `Wordpress > Plugins > Add new` menu.
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. You will see the notice to install all plugins.
+4. You can go to 'Myyntimaatio' admin menu on left side to configure.
