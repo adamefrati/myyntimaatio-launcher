@@ -273,6 +273,26 @@ function postman_import_settings() {
 	}
 }
 
+// Check if Better WP security(iThemes Security) Plugin is installed and activated
+function ithemes_security_import_settings() {
+	if ( is_plugin_active( 'better-wp-security/better-wp-security.php' ) ) {
+		
+		/**
+		 * Include the Better WP security(iThemes Security) core class.
+		 */
+		require_once(plugin_dir_path( __DIR__ ) . 'better-wp-security/core/core.php');
+
+		$data = array(  
+			'enabled' 			=> true,
+			'slug'				=> "kirjautuminen",
+			'theme_compat' 		=> true,
+			'theme_compat_slug' => "not_found",
+			'post_logout_slug' 	=> "",
+		);
+		ITSEC_Modules::set_settings( 'hide-backend', $data );
+	}
+}
+
 function ml_register_settings() {
 	
 	add_option( 'ml_option_name', '' );
@@ -288,14 +308,27 @@ function ml_register_options_page() {
 }
 add_action('admin_menu', 'ml_register_options_page');
 
+add_action ('wp_loaded', 'ml_options_callback');
+
+function ml_options_callback() {
+	$url = '/admin.php?page=myyntimaatio-launcher';
+    if( isset($_GET['postman_import']) ) {
+		if( $_GET['postman_import'] == 'true' ) {
+			postman_import_settings();
+			wp_redirect( admin_url( $url ) );
+		}
+	}
+	if( isset($_GET['ithemes_security_import']) ) {
+		if( $_GET['ithemes_security_import'] == 'true' ) {
+			ithemes_security_import_settings();
+			wp_redirect( admin_url( $url ) );
+		}
+	}
+}     
 
 function ml_options_page()
 {
-	if(isset($_GET['postman_import'])) {
-		if($_GET['postman_import']=='true') {
-			postman_import_settings();
-		}
-	}
+	
 ?>
 <style>
 	fieldset {
@@ -308,6 +341,9 @@ function ml_options_page()
 	#myyntimaatio_launcher a {
 		text-decoration: none;
 	}
+	#myyntimaatio_launcher table tr th {
+		text-align: left;
+	}
 </style>
 <div id="myyntimaatio_launcher">
   <?php screen_icon(); ?>
@@ -318,7 +354,9 @@ function ml_options_page()
 	  <legend><?php _e("Configuration"); ?></legend>
 	  
 	  <table>
+
 	  <?php
+	  	//PostMan Settings
  		if ( is_plugin_active( 'post-smtp/postman-smtp.php' ) ) {
 			require_once(plugin_dir_path( __DIR__ ) . 'post-smtp/Postman/Postman.php');
 			if( PostmanOptions::getInstance()->getUsername() != 'contactforms@myyntimaatio.fi' ) $ml_postman_import = '<span style="color:red;">Not Configured</span>';
@@ -327,6 +365,24 @@ function ml_options_page()
 	  <tr valign="top">
 	  	<th scope="row">Postman (<?php _e($ml_postman_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&postman_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
+	  </tr>
+	  <?php 
+		}
+ 	  ?>
+
+ 	  <?php
+	  	//Better WP Security (iThemes Security) Settings
+ 		if ( is_plugin_active( 'better-wp-security/better-wp-security.php' ) ) {
+			require_once(plugin_dir_path( __DIR__ ) . 'better-wp-security/core/core.php');
+			require_once(plugin_dir_path( __DIR__ ) . 'better-wp-security/core/lib/class-itsec-mail.php');
+
+			if( parse_url(ITSEC_Mail::filter_admin_page_url( get_option( 'siteurl' ) ), PHP_URL_QUERY) != 'itsec-hb-token=kirjautuminen' ) $ml_ithemes_security_import = '<span style="color:red;">Not Configured</span>';
+			else $ml_ithemes_security_import = '<span style="color:green;">Configured</span>';
+
+ 	  ?>
+	  <tr valign="top">
+	  	<th scope="row">iThemes Security (<?php _e($ml_ithemes_security_import); ?>)</th>
+		  <td><a href="./admin.php?page=myyntimaatio-launcher&ithemes_security_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
 	  <?php 
 		}
