@@ -24,11 +24,27 @@
  * Domain Path:       /languages
  */
 
+$plugin_data = get_file_data(__FILE__, array('Version' => 'Version'), false);
+$plugin_version = $plugin_data['Version'];
+define( 'MM_L_VERSION', $plugin_version );
 
 /**
  * Include the TGM_Plugin_Activation class.
  */
-require_once dirname( __FILE__ ) . '/class-tgm-plugin-activation.php';
+require_once plugin_basename( '/class-tgm-plugin-activation.php' );
+/**
+ * Include the Puc_v4_Factory class.
+ */
+require_once plugin_basename( '/plugin-update-checker/plugin-update-checker.php' );
+
+// Adding plugin autoupdate feature
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/shayanabbas/myyntimaatio-launcher/',
+	__FILE__,
+	'myyntimaatio-launcher'
+);
+
+$myUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 add_action( 'tgmpa_register', 'myyntimaatio_register_required_plugins' );
 
