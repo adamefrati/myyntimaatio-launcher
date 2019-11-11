@@ -100,12 +100,6 @@ function myyntimaatio_register_required_plugins() {
 			'required'  => true,
 		),
 
-		// Post SMTP Mailer/Email Log
-		array(
-			'name'      => 'Post SMTP Mailer/Email Log',
-			'slug'      => 'post-smtp',
-		),
-
 		// iThemes Security
 		array(
 			'name'      => 'iThemes Security',
@@ -132,6 +126,30 @@ function myyntimaatio_register_required_plugins() {
 			'name'      => 'Redirection By John Godley',
 			'slug'      => 'redirection',
 			'required'  => true,
+		),
+
+		// Post SMTP Mailer/Email Log
+		array(
+			'name'      => 'Post SMTP Mailer/Email Log',
+			'slug'      => 'post-smtp',
+		),
+
+		// Contact Form 7
+		array(
+			'name'      => 'Contact Form 7 Takayuki Miyoshi',
+			'slug'      => 'contact-form-7',
+		),
+
+		// Flamingo By Takayuki Miyoshi
+		array(
+			'name'      => 'Flamingo By Takayuki Miyoshi',
+			'slug'      => 'flamingo',
+		),
+
+		// Elementor Contact Form DB By Sean Barton - Tortoise IT
+		array(
+			'name'      => 'Elementor Contact Form DB By Sean Barton',
+			'slug'      => 'sb-elementor-contact-form-db',
 		),
 
 	);
