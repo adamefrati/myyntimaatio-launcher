@@ -18,7 +18,7 @@
  * Version:           1.0.0
  * Author:            Shayan Abbas
  * Author URI:        https://linkedin.com/in/shayanabbas
- * License:           GPL-2.0+
+ * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       myyntimaatio-launcher
  * Domain Path:       /languages
@@ -151,7 +151,7 @@ function myyntimaatio_register_required_plugins() {
 			'name'      => 'Elementor Contact Form DB By Sean Barton',
 			'slug'      => 'sb-elementor-contact-form-db',
 		),
-		
+
 		// Advanced Custom Fields By Elliot Condon
 		array(
 			'name'      => 'Advanced Custom Fields By Elliot Condon',
@@ -330,6 +330,18 @@ function ml_options_callback() {
 			wp_redirect( admin_url( $url ) );
 		}
 	}
+	if( isset($_GET['wordpress_import']) ) {
+		if( $_GET['wordpress_import'] == 'true' ) {
+		  	//Wordpress Settings
+		  	$date_format = update_option( 'date_format', 'd/m/Y' ); // d/m/Y
+		  	$time_format = update_option( 'time_format', 'H:i' ); // H:i
+		  	$links_updated_date_format = update_option( 'links_updated_date_format', 'd/m/Y H:i' ); // d/m/Y H:i
+		  	$permalink_structure = update_option( 'permalink_structure', '/%postname%/' ); // /%postname%/
+		  	$WPLANG = update_option( 'WPLANG', 'fi' ); // fi
+		  	$timezone_string = update_option( 'timezone_string', 'Europe/Helsinki' ); // Europe/Helsinki
+			wp_redirect( admin_url( $url ) );
+		}
+	}
 }     
 
 function ml_options_page()
@@ -360,6 +372,28 @@ function ml_options_page()
 	  <legend><?php _e("Configuration"); ?></legend>
 	  
 	  <table>
+
+	  <?php
+	  	//Wordpress Settings
+	  	$date_format = get_option('date_format'); // d/m/Y
+	  	$time_format = get_option('time_format'); // H:i
+	  	$links_updated_date_format = get_option('links_updated_date_format'); // d/m/Y H:i
+	  	$permalink_structure = get_option('permalink_structure'); // /%postname%/
+	  	$WPLANG = get_option('WPLANG'); // fi
+	  	$timezone_string = get_option('timezone_string'); // Europe/Helsinki
+
+ 		if ( $date_format == 'd/m/Y' AND  $time_format == 'H:i' AND $links_updated_date_format == 'd/m/Y H:i' AND $permalink_structure == '/%postname%/' AND $timezone_string == 'Europe/Helsinki' ) {
+
+			$ml_wordpress_import = '<span style="color:green;">Configured</span>';
+
+		} else {
+ 			$ml_wordpress_import = '<span style="color:red;">Not Configured</span>';
+		}
+ 	  ?>
+	  <tr valign="top">
+	  	<th scope="row">Wordpress(FI) Settings (<?php _e($ml_wordpress_import); ?>)</th>
+		  <td><a href="./admin.php?page=myyntimaatio-launcher&wordpress_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
+	  </tr>
 
 	  <?php
 	  	//PostMan Settings
