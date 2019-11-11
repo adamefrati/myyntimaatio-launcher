@@ -151,6 +151,12 @@ function myyntimaatio_register_required_plugins() {
 			'name'      => 'Elementor Contact Form DB By Sean Barton',
 			'slug'      => 'sb-elementor-contact-form-db',
 		),
+		
+		// Advanced Custom Fields By Elliot Condon
+		array(
+			'name'      => 'Advanced Custom Fields By Elliot Condon',
+			'slug'      => 'advanced-custom-fields',
+		),
 
 	);
 
