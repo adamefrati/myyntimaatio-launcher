@@ -302,6 +302,8 @@ function ithemes_security_import_settings() {
 function ml_register_settings() {
 	
 	add_option( 'ml_option_name', '' );
+	add_option( 'wp_before_head', '' );
+	add_option( 'wp_before_body', '' );
 	register_setting( 'ml_options_group', 'ml_option_name', 'ml_callback' );
 	register_setting( 'ml_options_group', 'wp_logo_url');
 	register_setting( 'ml_options_group', 'wp_logo_height');
@@ -310,6 +312,8 @@ function ml_register_settings() {
 	register_setting( 'ml_options_group', 'wp_button_bg_color');
 	register_setting( 'ml_options_group', 'wp_button_border_color');
 	register_setting( 'ml_options_group', 'wp_button_text_color');
+	register_setting( 'ml_options_group', 'wp_before_head');
+	register_setting( 'ml_options_group', 'wp_before_body');
 	
 }
 add_action( 'admin_init', 'ml_register_settings' );
@@ -359,6 +363,7 @@ function ml_options_page()
 	wp_enqueue_script( 'wp-color-picker-alpha', plugins_url( 'assets/js/wp-color-picker-alpha.min.js', __FILE__ ), array( 'wp-color-picker' ) );
 	wp_register_script( 'ml_backend_js', plugins_url( 'assets/js/backend.js', __FILE__ ), array( 'jquery', 'wp-color-picker' ),  MM_L_VERSION );
 	wp_enqueue_script( 'ml_backend_js' );
+
 ?>
 <style>
 	fieldset {
@@ -481,6 +486,7 @@ function ml_options_page()
 	ul.wp-tab-bar a:focus {
     	box-shadow: none;
 	}
+
 </style>
 <div id="myyntimaatio_launcher">
   <?php screen_icon(); ?>
@@ -492,6 +498,7 @@ function ml_options_page()
   <ul class="wp-tab-bar">
 	<li class="wp-tab-active"><a href="#general">General</a></li>
 	<li><a href="#login">Login Page</a></li>
+	<li><a href="#header_footer">Header/Footer</a></li>
   </ul>
   <div class="wp-tab-panel" id="general">
 	
@@ -608,6 +615,27 @@ function ml_options_page()
 			</table>
 	</fieldset>
   </div>
+
+  <div class="wp-tab-panel" id="header_footer" style="display: none;">
+	
+  	<fieldset>
+	  <legend><?php _e("Header/Footer"); ?></legend>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row">Header (Before &lt;/head&gt; Tag) <br />
+						<textarea id="code_editor_page_head" name="wp_before_head" class="widefat textarea" style="min-height: 300px;"><?php echo esc_textarea( get_option('wp_before_head') ); ?></textarea>
+						<p class="description"><i>Can be used for JS/HTML code.</i></p>
+					</th>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Footer (Before &lt;/body&gt; Tag) <br />
+						<textarea id="code_editor_page_foot" name="wp_before_body" class="widefat textarea" style="min-height: 300px;"><?php echo esc_textarea( get_option('wp_before_body') ); ?></textarea>
+						<p class="description"><i>Can be used for JS/HTML code.</i></p>
+					</th>
+				</tr>
+			</table>
+	</fieldset>
+  </div>
 <!-- End tabs -->
 
   <?php submit_button(); ?>
@@ -690,8 +718,20 @@ function wordpress_custom_login_logo() {
 }
 add_action( 'login_head', 'wordpress_custom_login_logo' );
 
-add_filter( 'login_headerurl', 'my_custom_login_url' );
-
+//Get Main Site URL for Login page logo
 function my_custom_login_url($url) {
 	return get_site_url();
 }
+add_filter( 'login_headerurl', 'my_custom_login_url' );
+
+//Add text/html before </head>
+function ml_wp_header() {
+	echo get_option('wp_before_head');
+}
+add_action('wp_head', 'ml_wp_header');
+
+//Add text/html before </body>
+function ml_wp_footer() {
+	echo get_option('wp_before_body');
+}
+add_action('wp_footer', 'ml_wp_footer');
