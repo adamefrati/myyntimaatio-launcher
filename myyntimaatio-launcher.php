@@ -299,6 +299,22 @@ function ithemes_security_import_settings() {
 	}
 }
 
+// Check if WP Fastest Cache Plugin is installed and activated
+function wp_fastest_cache_import_settings() {
+	if ( is_plugin_active( 'wp-fastest-cache/wpFastestCache.php' ) ) {
+
+		/**
+		 * Include the Better WP security(iThemes Security) core class.
+		 */
+		require_once(plugin_dir_path( __DIR__ ) . 'wp-fastest-cache/wpFastestCache.php');
+
+		update_option( 'WpFastestCachePreLoad', '{"homepage":-1,"post":1,"category":0,"page":1,"tag":0,"attachment":1,"customposttypes":0,"customTaxonomies":0,"number":"4"}' );
+		update_option( 'WpFastestCache', '{"wpFastestCacheStatus":"on","wpFastestCachePreload":"on","wpFastestCachePreload_homepage":"on","wpFastestCachePreload_post":"on","wpFastestCachePreload_category":"on","wpFastestCachePreload_page":"on","wpFastestCachePreload_tag":"on","wpFastestCachePreload_attachment":"on","wpFastestCachePreload_customposttypes":"on","wpFastestCachePreload_customTaxonomies":"on","wpFastestCachePreload_number":"4","wpFastestCachePreload_restart":"on","wpFastestCacheLoggedInUser":"on","wpFastestCacheMobile":"on","wpFastestCacheNewPost":"on","wpFastestCacheNewPost_type":"all","wpFastestCacheUpdatePost":"on","wpFastestCacheUpdatePost_type":"post","wpFastestCacheMinifyHtml":"on","wpFastestCacheMinifyCss":"on","wpFastestCacheCombineCss":"on","wpFastestCacheCombineJs":"on","wpFastestCacheGzip":"on","wpFastestCacheLBC":"on","wpFastestCacheDisableEmojis":"on","wpFastestCacheLanguage":"eng"}' );
+		$wpfc = new WpFastestCache();
+		$wpfc->deleteCache();
+	}
+}
+
 function ml_register_settings() {
 	
 	add_option( 'ml_option_name', '' );
@@ -350,6 +366,12 @@ function ml_options_callback() {
 		  	$permalink_structure = update_option( 'permalink_structure', '/%postname%/' ); // /%postname%/
 		  	$WPLANG = update_option( 'WPLANG', 'fi' ); // fi
 		  	$timezone_string = update_option( 'timezone_string', 'Europe/Helsinki' ); // Europe/Helsinki
+			wp_redirect( admin_url( $url ) );
+		}
+	}
+	if( isset($_GET['wp_fastest_cache_import']) ) {
+		if( $_GET['wp_fastest_cache_import'] == 'true' ) {
+			wp_fastest_cache_import_settings();
 			wp_redirect( admin_url( $url ) );
 		}
 	}
@@ -556,6 +578,24 @@ function ml_options_page()
 	  <tr valign="top">
 	  	<th scope="row">iThemes Security (<?php _e($ml_ithemes_security_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&ithemes_security_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
+	  </tr>
+	  <?php 
+		}
+ 	  ?>
+
+ 	  <?php
+	  	//WP Fastest Cache Settings
+ 		if ( is_plugin_active( 'wp-fastest-cache/wpFastestCache.php' ) ) {
+			$WpFastestCachePreLoad = get_option('WpFastestCachePreLoad');
+			$WpFastestCache = get_option('WpFastestCache');
+
+			if( $WpFastestCachePreLoad == '' AND $WpFastestCache == '' ) $ml_wp_fastest_cache_import = '<span style="color:red;">Not Configured</span>';
+			else $ml_wp_fastest_cache_import = '<span style="color:green;">Configured</span>';
+
+ 	  ?>
+	  <tr valign="top">
+	  	<th scope="row">WP Fastest Cache (<?php _e($ml_wp_fastest_cache_import); ?>)</th>
+		  <td><a href="./admin.php?page=myyntimaatio-launcher&wp_fastest_cache_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
 	  <?php 
 		}
