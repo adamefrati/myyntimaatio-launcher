@@ -84,6 +84,13 @@ function myyntimaatio_register_required_plugins() {
 			'required'  => true,
 		),
 
+		// Advanced Custom Field PRO Extension
+		array(
+			'name'      => 'Advanced Custom Fields PRO By Elliot Condon',
+			'slug'      => 'advanced-custom-fields-pro',
+			'source'    => dirname( __FILE__ ) . '/plugins/advanced-custom-fields-pro.zip', // The plugin source.
+		),
+
 		// Elementor
 		array(
 			'name'      => 'Elementor Page Builder',
@@ -150,12 +157,6 @@ function myyntimaatio_register_required_plugins() {
 		array(
 			'name'      => 'Elementor Contact Form DB By Sean Barton',
 			'slug'      => 'sb-elementor-contact-form-db',
-		),
-
-		// Advanced Custom Fields By Elliot Condon
-		array(
-			'name'      => 'Advanced Custom Fields By Elliot Condon',
-			'slug'      => 'advanced-custom-fields',
 		),
 
 	);
@@ -315,6 +316,44 @@ function wp_fastest_cache_import_settings() {
 	}
 }
 
+// Check if ACF PRO is installed and activated
+function wp_acf_pro_license_import_settings() {
+	if ( is_plugin_active( 'advanced-custom-fields-pro/acf.php' ) ) {
+
+		/**
+		 * Include the ACF Pro core class.
+		 */
+		require_once(plugin_dir_path( __DIR__ ) . 'advanced-custom-fields-pro/acf.php');
+
+		// Connect to ACF API.
+		$post = array(
+			'acf_license'	=> trim('b3JkZXJfaWQ9MTM2ODI0fHR5cGU9ZGV2ZWxvcGVyfGRhdGU9MjAxOC0wOC0wOCAwODo1MzoyOQ=='),
+			'acf_version'	=> acf_get_setting('version'),
+			'wp_name'		=> get_bloginfo('name'),
+			'wp_url'		=> home_url(),
+			'wp_version'	=> get_bloginfo('version'),
+			'wp_language'	=> get_bloginfo('language'),
+			'wp_timezone'	=> get_option('timezone_string'),
+		);
+		//var_dump($post);
+		$response = acf_updates()->request('v2/plugins/activate?p=pro', $post);
+
+		// On success.
+		if( $response['status'] == 1 ) {
+			// Update license.
+			acf_pro_update_license( $response['license'] );
+			
+			// Refresh plugins transient to fetch new update data.
+			acf_updates()->refresh_plugins_transient();
+			
+			// Show notice.
+			acf_add_admin_notice( $response['message'], 'success' );
+		
+		// On failure.	
+		}
+	}
+}
+
 function ml_register_settings() {
 	
 	add_option( 'ml_option_name', '' );
@@ -375,6 +414,13 @@ function ml_options_callback() {
 			wp_redirect( admin_url( $url ) );
 		}
 	}
+	if( isset($_GET['acf_pro_license_import']) ) {
+		if( $_GET['acf_pro_license_import'] == 'true' ) {
+			wp_acf_pro_license_import_settings();
+			wp_redirect( admin_url( $url ) );
+		}
+	}
+
 }     
 
 function ml_options_page()
@@ -475,6 +521,24 @@ function ml_options_page()
 	  <tr valign="top">
 	  	<th scope="row">WP Fastest Cache (<?php _e($ml_wp_fastest_cache_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&wp_fastest_cache_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
+	  </tr>
+	  <?php 
+		}
+ 	  ?>
+
+
+ 	  <?php
+	  	//Advanced Custom Fields PRO Settings
+ 		if ( is_plugin_active( 'advanced-custom-fields-pro/acf.php' ) ) {
+			$acf_pro_license = get_option('acf_pro_license');
+
+			if( $acf_pro_license == '' ) $ml_acf_pro_license_import = '<span style="color:red;">Not Configured</span>';
+			else $ml_acf_pro_license_import = '<span style="color:green;">Configured</span>';
+
+ 	  ?>
+	  <tr valign="top">
+	  	<th scope="row">ACF License PRO (<?php _e($ml_acf_pro_license_import); ?>)</th>
+		  <td><a href="./admin.php?page=myyntimaatio-launcher&acf_pro_license_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
 	  <?php 
 		}

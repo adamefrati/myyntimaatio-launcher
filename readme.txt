@@ -26,7 +26,7 @@ After Installation and Activation visit Myyntimaatio Menu on left side to import
 * WP Fastest Cache By Emre Vona 
 * Yoast SEO By Team Yoast
 * iThemes Security
-* Advanced Custom Fields By Elliot Condon
+* Advanced Custom Fields PRO By Elliot Condon
 * Contact Form 7 Takayuki Miyoshi
 * Elementor Contact Form DB By Sean Barton
 * Flamingo By Takayuki Miyoshi
