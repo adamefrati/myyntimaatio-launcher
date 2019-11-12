@@ -303,6 +303,13 @@ function ml_register_settings() {
 	
 	add_option( 'ml_option_name', '' );
 	register_setting( 'ml_options_group', 'ml_option_name', 'ml_callback' );
+	register_setting( 'ml_options_group', 'wp_logo_url');
+	register_setting( 'ml_options_group', 'wp_logo_height');
+	register_setting( 'ml_options_group', 'wp_logo_width');
+	register_setting( 'ml_options_group', 'wp_login_bg_color');
+	register_setting( 'ml_options_group', 'wp_button_bg_color');
+	register_setting( 'ml_options_group', 'wp_button_border_color');
+	register_setting( 'ml_options_group', 'wp_button_text_color');
 	
 }
 add_action( 'admin_init', 'ml_register_settings' );
@@ -345,8 +352,13 @@ function ml_options_callback() {
 }     
 
 function ml_options_page()
-{
-	
+{	
+	wp_enqueue_script('jquery');
+	wp_enqueue_media();
+	wp_enqueue_style( 'wp-color-picker' );
+	wp_enqueue_script( 'wp-color-picker-alpha', plugins_url( 'assets/js/wp-color-picker-alpha.min.js', __FILE__ ), array( 'wp-color-picker' ) );
+	wp_register_script( 'ml_backend_js', plugins_url( 'assets/js/backend.js', __FILE__ ), array( 'jquery', 'wp-color-picker' ),  MM_L_VERSION );
+	wp_enqueue_script( 'ml_backend_js' );
 ?>
 <style>
 	fieldset {
@@ -356,11 +368,118 @@ function ml_options_page()
 	legend {
 		font-weight: bold;
 	}
+	#myyntimaatio_launcher {
+		margin: 0px 15px 0px 0px;
+	}
 	#myyntimaatio_launcher a {
 		text-decoration: none;
 	}
 	#myyntimaatio_launcher table tr th {
 		text-align: left;
+	}
+	#post-body ul.wp-tab-bar {
+		float: left;
+		width: 120px;
+		text-align: right;
+		/* Negative margin for the sake of those without JS: all tabs display */
+		margin: 0 -120px 0 5px;
+		padding: 0;
+	}
+	 
+	#post-body ul.wp-tab-bar li {
+		padding: 8px;
+	}
+
+	#post-body ul.wp-tab-bar li.wp-tab-active {
+		-webkit-border-top-left-radius: 3px;
+		-webkit-border-bottom-left-radius: 3px;
+		-webkit-border-top-right-radius: 0px;
+		border-top-left-radius: 3px;
+		border-bottom-left-radius: 3px;
+		border-top-right-radius: 0px;
+	}
+
+	div.wp-tab-panel-active {
+		display:block;
+	}
+
+	div.wp-tab-panel-inactive {
+	 	display:none;
+	}
+
+	.has-right-sidebar #side-sortables .wp-tab-bar li {
+		display: inline;
+		line-height: 1.35em;
+	}
+
+	.no-js #side-sortables .wp-tab-bar li.hide-if-no-js {
+	 	display: none;
+	}
+
+	#side-sortables .wp-tab-bar a {
+		text-decoration: none;
+	}
+
+	#side-sortables .wp-tab-bar {
+		margin: 8px 0 3px;
+	}
+
+	#side-sortables .wp-tab-bar {
+		margin-bottom: 3px;
+	}
+
+	#post-body .wp-tab-bar li.wp-tab-active {
+		border-style: solid none solid solid;
+		border-width: 1px 0 1px 1px;
+		margin-right: -1px;
+	}
+
+	#post-body ul.wp-tab-bar {
+		float: left;
+		width: 120px;
+		text-align: right;
+		/* Negative margin for the sake of those without JS: all tabs display */
+		margin: 0 -120px 0 5px;
+		padding: 0;
+	}
+
+	#post-body ul.wp-tab-bar li {
+		padding: 8px;
+		display: block;
+	}
+
+	#post-body ul.wp-tab-bar li a {
+		text-decoration: underline;
+	}
+
+	#post-body ul.wp-tab-bar li.wp-tab-active {
+	 	-webkit-border-top-left-radius: 3px;
+	 	-webkit-border-bottom-left-radius: 3px;
+	 	border-top-left-radius: 3px;
+	 	border-bottom-left-radius: 3px;
+	}
+
+	#post-body div.wp-tab-panel {
+		margin: 0 5px 0 125px;
+	}
+
+	.wp-tab-panel {
+		padding: 20px !important;
+		min-height: auto !important;
+	    max-height: 100% !important;
+	    overflow: inherit !important;
+	}
+
+	#post-body ul.wp-tab-bar li.wp-tab-active a {
+		font-weight: bold;
+		text-decoration: none;
+	}
+	ul.wp-tab-bar li {
+	    padding: 10px 10px 10px 10px;
+    	line-height: 2.35em !important;
+	}
+	ul.wp-tab-bar a:focus {
+    	box-shadow: none;
 	}
 </style>
 <div id="myyntimaatio_launcher">
@@ -368,11 +487,18 @@ function ml_options_page()
   <h2><?php _e("Myyntimaatio Launcher"); ?></h2>
   <form method="post" action="options.php">
   <?php settings_fields( 'ml_options_group' ); ?>
-  <fieldset>
+
+  <!-- Start tabs -->
+  <ul class="wp-tab-bar">
+	<li class="wp-tab-active"><a href="#general">General</a></li>
+	<li><a href="#login">Login Page</a></li>
+  </ul>
+  <div class="wp-tab-panel" id="general">
+	
+	<fieldset>
 	  <legend><?php _e("Configuration"); ?></legend>
 	  
 	  <table>
-
 	  <?php
 	  	//Wordpress Settings
 	  	$date_format = get_option('date_format'); // d/m/Y
@@ -428,9 +554,144 @@ function ml_options_page()
 		}
  	  ?>
 	  </table>
-  </fieldset>
+    </fieldset>
+  </div>
+  <div class="wp-tab-panel" id="login" style="display: none;">
+	
+  	<fieldset>
+	  <legend><?php _e("Login Page"); ?></legend>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row">Login Logo</th>
+					<td>
+						<input type="text" id="wp_logo_url" name="wp_logo_url" value="<?php echo esc_attr( get_option('wp_logo_url') ); ?>" />
+						<input type="button" name="upload-btn" id="upload-btn" class="button-secondary" value="Upload Logo">
+						<p class="description"><i>It will appear in WP Administrator login page.</i></p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Height</th>
+					<td>
+						<input type="text" name="wp_logo_height" value="<?php echo esc_attr( get_option('wp_logo_height') ); ?>" /> px					
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Width</th>
+					<td>
+						<input type="text" name="wp_logo_width" value="<?php echo esc_attr( get_option('wp_logo_width') ); ?>" /> px
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Background Color</th>
+					<td>
+						<input type="text" class="colorpicker" data-alpha="true" name="wp_login_bg_color" value="<?php echo esc_attr( get_option( 'wp_login_bg_color', "#f1f1f1" ) ); ?>" />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Button Background Color</th>
+					<td>
+						<input type="text" class="colorpicker" data-alpha="true" name="wp_button_bg_color" value="<?php echo esc_attr( get_option( 'wp_button_bg_color', "#0085ba" ) ); ?>" />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Button Border Color</th>
+					<td>
+						<input type="text" class="colorpicker" data-alpha="true" name="wp_button_border_color" value="<?php echo esc_attr( get_option( 'wp_button_border_color', "#006799" ) ); ?>" />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Button Text Color</th>
+					<td>
+						<input type="text" class="colorpicker" data-alpha="true" name="wp_button_text_color" value="<?php echo esc_attr( get_option( 'wp_button_text_color', "#ffffff" ) ); ?>" />
+					</td>
+				</tr>
+			</table>
+	</fieldset>
+  </div>
+<!-- End tabs -->
+
   <?php submit_button(); ?>
   </form>
+
+	<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$('#upload-btn').click(function(e) {
+			e.preventDefault();
+			var image = wp.media({ 
+				title: 'Upload Logo',
+				multiple: false
+			}).open()
+			.on('select', function(e){
+				var uploaded_image = image.state().get('selection').first();
+				console.log(uploaded_image);
+				var image_url = uploaded_image.toJSON().url;
+				$('#wp_logo_url').val(image_url);
+			});
+		});
+	});
+	</script>
 </div>
 <?php
+}
+
+/* Custom WordPress admin login header logo */
+function wordpress_custom_login_logo() {
+    $logo_url 				= get_option('wp_logo_url');
+    $wp_logo_height 		= get_option('wp_logo_height');
+    $wp_logo_width			= get_option('wp_logo_width');
+    $wp_login_bg_color 		= get_option('wp_login_bg_color');
+    $wp_button_bg_color 	= get_option('wp_button_bg_color');
+    $wp_button_border_color = get_option('wp_button_border_color');
+    $wp_button_text_color 	= get_option('wp_button_text_color');
+
+	if(empty($wp_logo_height))
+	{
+		$wp_logo_height='100px';
+	}
+	else
+	{
+		$wp_logo_height.='px';
+	}
+	if(empty($wp_logo_width))
+	{
+		$wp_logo_width='100%';
+	}	
+	else
+	{
+		$wp_logo_width.='px';
+	}
+	if(!empty($logo_url))
+	{
+		echo '<style type="text/css">'.
+             'h1 a { 
+					background-image:url('.$logo_url.') !important;
+					height:'.$wp_logo_height.' !important;
+					width:'.$wp_logo_width.' !important;
+					background-size:100% !important;
+					line-height:inherit !important;
+				}
+			   body.login {
+			   		background: '.$wp_login_bg_color.' !important;
+			   }
+			   #login .button-primary {
+				    background: '.$wp_button_bg_color.' !important;
+				    border-color: '.$wp_button_bg_color.' '.$wp_button_border_color.' '.$wp_button_border_color.' !important;
+				    box-shadow: 0 1px 0 '.$wp_button_border_color.' !important;
+				    color: '.$wp_button_text_color.' !important;
+				    text-decoration: none !important;
+				    text-shadow: 0 -1px 1px '.$wp_button_border_color.', 1px 0 1px '.$wp_button_border_color.', 0 1px 1px '.$wp_button_border_color.', -1px 0 1px '.$wp_button_border_color.' !important;
+				}
+				.login #backtoblog a, .login #nav a {
+				    color: '.$wp_button_bg_color.' !important;
+				}
+				'.
+         '</style>';
+	}
+}
+add_action( 'login_head', 'wordpress_custom_login_logo' );
+
+add_filter( 'login_headerurl', 'my_custom_login_url' );
+
+function my_custom_login_url($url) {
+	return get_site_url();
 }
