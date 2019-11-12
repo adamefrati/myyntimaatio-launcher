@@ -1,0 +1,120 @@
+	fieldset {
+		border: 1px solid #333;
+		padding: 15px;
+	}
+	legend {
+		font-weight: bold;
+	}
+	#myyntimaatio_launcher {
+		margin: 0px 15px 0px 0px;
+	}
+	#myyntimaatio_launcher a {
+		text-decoration: none;
+	}
+	#myyntimaatio_launcher table tr th {
+		text-align: left;
+	}
+	#post-body ul.wp-tab-bar {
+		float: left;
+		width: 120px;
+		text-align: right;
+		/* Negative margin for the sake of those without JS: all tabs display */
+		margin: 0 -120px 0 5px;
+		padding: 0;
+	}
+	 
+	#post-body ul.wp-tab-bar li {
+		padding: 8px;
+	}
+
+	#post-body ul.wp-tab-bar li.wp-tab-active {
+		-webkit-border-top-left-radius: 3px;
+		-webkit-border-bottom-left-radius: 3px;
+		-webkit-border-top-right-radius: 0px;
+		border-top-left-radius: 3px;
+		border-bottom-left-radius: 3px;
+		border-top-right-radius: 0px;
+	}
+
+	div.wp-tab-panel-active {
+		display:block;
+	}
+
+	div.wp-tab-panel-inactive {
+	 	display:none;
+	}
+
+	.has-right-sidebar #side-sortables .wp-tab-bar li {
+		display: inline;
+		line-height: 1.35em;
+	}
+
+	.no-js #side-sortables .wp-tab-bar li.hide-if-no-js {
+	 	display: none;
+	}
+
+	#side-sortables .wp-tab-bar a {
+		text-decoration: none;
+	}
+
+	#side-sortables .wp-tab-bar {
+		margin: 8px 0 3px;
+	}
+
+	#side-sortables .wp-tab-bar {
+		margin-bottom: 3px;
+	}
+
+	#post-body .wp-tab-bar li.wp-tab-active {
+		border-style: solid none solid solid;
+		border-width: 1px 0 1px 1px;
+		margin-right: -1px;
+	}
+
+	#post-body ul.wp-tab-bar {
+		float: left;
+		width: 120px;
+		text-align: right;
+		/* Negative margin for the sake of those without JS: all tabs display */
+		margin: 0 -120px 0 5px;
+		padding: 0;
+	}
+
+	#post-body ul.wp-tab-bar li {
+		padding: 8px;
+		display: block;
+	}
+
+	#post-body ul.wp-tab-bar li a {
+		text-decoration: underline;
+	}
+
+	#post-body ul.wp-tab-bar li.wp-tab-active {
+	 	-webkit-border-top-left-radius: 3px;
+	 	-webkit-border-bottom-left-radius: 3px;
+	 	border-top-left-radius: 3px;
+	 	border-bottom-left-radius: 3px;
+	}
+
+	#post-body div.wp-tab-panel {
+		margin: 0 5px 0 125px;
+	}
+
+	.wp-tab-panel {
+		padding: 20px !important;
+		min-height: auto !important;
+	    max-height: 100% !important;
+	    overflow: inherit !important;
+	}
+
+	#post-body ul.wp-tab-bar li.wp-tab-active a {
+		font-weight: bold;
+		text-decoration: none;
+	}
+	ul.wp-tab-bar li {
+	    padding: 10px 10px 10px 10px;
+    	line-height: 2.35em !important;
+	}
+	ul.wp-tab-bar a:focus {
+    	box-shadow: none;
+	}
