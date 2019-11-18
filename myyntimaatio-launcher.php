@@ -375,7 +375,7 @@ add_action( 'admin_init', 'ml_register_settings' );
 
 function ml_register_options_page() {
 
-	add_menu_page( 'Myyntimaatio', 'Myyntimaatio',  'manage_options', 'myyntimaatio-launcher', 'ml_options_page', 'dashicons-image-rotate' );
+	add_menu_page( 'Myyntimaatio', 'Myyntimaatio',  'manage_options', 'myyntimaatio-launcher', 'ml_options_page', plugins_url( 'assets/img/LOGO_Myyntimaatio_circle.png', __FILE__ ) );
 	
 }
 add_action('admin_menu', 'ml_register_options_page');

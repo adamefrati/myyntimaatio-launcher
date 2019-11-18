@@ -118,3 +118,11 @@
 	ul.wp-tab-bar a:focus {
     	box-shadow: none;
 	}
+	#adminmenu .wp-menu-image img {
+	    max-width: 20px;
+	    max-height: 20px;
+	    padding: 7px;
+	}
+	.color-alpha {
+		height:100% !important;
+	}
