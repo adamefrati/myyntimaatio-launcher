@@ -373,8 +373,14 @@ function ml_register_settings() {
 }
 add_action( 'admin_init', 'ml_register_settings' );
 
-function ml_register_options_page() {
+function mm_global_styles()
+{
+ echo "<style>#adminmenu .wp-menu-image img {  max-width: 20px; max-height: 20px; padding: 7px !important; }</style>";
+}
+add_action('admin_enqueue_scripts', 'mm_global_styles', 100);
 
+function ml_register_options_page() {
+	
 	add_menu_page( 'Myyntimaatio', 'Myyntimaatio',  'manage_options', 'myyntimaatio-launcher', 'ml_options_page', plugins_url( 'assets/img/LOGO_Myyntimaatio_circle.png', __FILE__ ) );
 	
 }
