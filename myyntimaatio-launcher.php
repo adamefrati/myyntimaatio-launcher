@@ -268,14 +268,27 @@ function myyntimaatio_register_required_plugins() {
 
 function postman_import_settings() {
 	if ( is_plugin_active( 'post-smtp/postman-smtp.php' ) ) {
-		
 		/**
 		 * Include the Postman class.
 		 */
 		require_once(plugin_dir_path( __DIR__ ) . 'post-smtp/Postman/Postman.php');
+
+		$base64 = 'eNqFU8GS2yAM/RfOmWzW3aTbnPoLvXeGISAnTEBiQKR1O/33CjvOOpudWV8M70lIDz3+KkCreUig9opDUSt1osJoYgNK5LSmvvcWvuy2a0tR+ESZ1X77+nWlCqCDrCEaHyTcErKx3FOO5XscBmQfjWFP695LIuAFAiXQU9rnCZwNllZubrD1I3j76VYTchE0ScNXxlQ+zcGBjh7VrcmrJAFojLLBA7L27gOwgM3AE3EwxVs9srVAvh7zSeeLpGRK+UW5lflR067rvm0lIBp02YegTfL6DMNUq7V6zN7do03pseLHoCNZ4UJdhhQGzTTtpEEL7v3W2rvtYd6fwLjpTseDjCT6CFTlKnabVRONYEUkvuHPgstN6wAyXLV/2cg3dacbDGgOAZp4zhXUgonmt7CcPUi9bitJWeREck1HyuTqWGm2gc0+yWD8H6Gfu1dBY9LONxf9fJK1xCGxF6uasUEZ1UVsK7SD3tTAzbm1nOgiXmiDnETeIKYz4HUKwdjzErg72J4yRdB1Nk5vQji0hNGVi8fzwE0PZ/MeFrPV7LnNFQlhmdZLqdvrejhvYcfHWm+uE04ElnaXe9WtN+ud+vcfuCZgwA==';
+
+		// Decryption starts
+		$gz = base64_decode( $base64 );
+		$json = @gzuncompress( $gz );
+		$data = json_decode( $json, true );
+		$data['basic_auth_password'] = base64_encode($data['basic_auth_password']);
+		$postmanState = get_option( 'postman_state' );
+		$postmanState ['version'] = $data ['version'];
+		assert( $postmanState ['version'] == $data ['version'] );
+
+		// If settings are not imported already
 		if( PostmanOptions::getInstance()->getUsername() != 'contactforms@myyntimaatio.fi' ) {
 			//Importing default configuration of Myyntimaatio SMTP account.
-			PostmanOptions::getInstance()->import( sanitize_textarea_field('eNqFU8GS2yAM/RfOmWzW3aTbnPoLvXeGISAnTEBiQKR1O/33CjvOOpudWV8M70lIDz3+KkCreUig9opDUSt1osJoYgNK5LSmvvcWvuy2a0tR+ESZ1X77+nWlCqCDrCEaHyTcErKx3FOO5XscBmQfjWFP695LIuAFAiXQU9rnCZwNllZubrD1I3j76VYTchE0ScNXxlQ+zcGBjh7VrcmrJAFojLLBA7L27gOwgM3AE3EwxVs9srVAvh7zSeeLpGRK+UW5lflR067rvm0lIBp02YegTfL6DMNUq7V6zN7do03pseLHoCNZ4UJdhhQGzTTtpEEL7v3W2rvtYd6fwLjpTseDjCT6CFTlKnabVRONYEUkvuHPgstN6wAyXLV/2cg3dacbDGgOAZp4zhXUgonmt7CcPUi9bitJWeREck1HyuTqWGm2gc0+yWD8H6Gfu1dBY9LONxf9fJK1xCGxF6uasUEZ1UVsK7SD3tTAzbm1nOgiXmiDnETeIKYz4HUKwdjzErg72J4yRdB1Nk5vQji0hNGVi8fzwE0PZ/MeFrPV7LnNFQlhmdZLqdvrejhvYcfHWm+uE04ElnaXe9WtN+ud+vcfuCZgwA==') );
+			update_option( 'postman_state', $postmanState );
+			update_option( PostmanOptions::POSTMAN_OPTIONS, $data );
 		}
 	}
 }
