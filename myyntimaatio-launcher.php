@@ -573,6 +573,15 @@ function ml_options_callback() {
 		  	$permalink_structure = update_option( 'permalink_structure', '/%postname%/' ); // /%postname%/
 		  	$WPLANG = update_option( 'WPLANG', 'fi' ); // fi
 		  	$timezone_string = update_option( 'timezone_string', 'Europe/Helsinki' ); // Europe/Helsinki
+
+			// Delete Extra themes
+			$somePath = '../wp-content/themes';
+			$directories = glob($somePath . '/*' , GLOB_ONLYDIR);
+			$directories = array_diff($directories, ["../wp-content/themes/hello-elementor", "../wp-content/themes/Myyntimaatio"]);
+			foreach ($directories as $dir) {
+				delete_files($dir);
+			}
+
 			wp_redirect( admin_url( $url ) );
 		}
 	}
@@ -886,3 +895,20 @@ function ml_wp_footer() {
 	echo get_option('wp_before_body');
 }
 add_action('wp_footer', 'ml_wp_footer');
+
+/* 
+ * php delete function that deals with directories recursively
+ */
+function delete_files($target) {
+    if(is_dir($target)){
+        $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned
+
+        foreach( $files as $file ){
+            delete_files( $file );      
+        }
+
+        rmdir( $target );
+    } elseif(is_file($target)) {
+        unlink( $target );  
+    }
+}
