@@ -263,9 +263,158 @@ function myyntimaatio_register_required_plugins() {
 	tgmpa( $plugins, $config );
 }
 
-// Check if PostMan Plugin is installed and activated
-//add_action( 'admin_init', 'postman_import_settings' );
 
+// define the filter_wpcf7_messages callback 
+function filter_wpcf7_messages() { 
+    // translating EN CF7 messages to Soumi
+    	$messages = array(
+		'mail_sent_ok' => array(
+			'description'
+				=> __( "Sender's message was sent successfully", 'contact-form-7' ),
+			'default'
+				=> __( "Kiitos viestistäsi. Se on lähetetty.", 'contact-form-7' ),
+		),
+
+		'mail_sent_ng' => array(
+			'description'
+				=> __( "Sender's message failed to send", 'contact-form-7' ),
+			'default'
+				=> __( "Viestin lähettämisessä tapahtui virhe. Yritä uudelleen myöhemmin.", 'contact-form-7' ),
+		),
+
+		'validation_error' => array(
+			'description'
+				=> __( "Validation errors occurred", 'contact-form-7' ),
+			'default'
+				=> __( "Yhdessä tai useammassa kentässä on virhe. Tarkista ja yritä uudelleen.", 'contact-form-7' ),
+		),
+
+		'spam' => array(
+			'description'
+				=> __( "Submission was referred to as spam", 'contact-form-7' ),
+			'default'
+				=> __( "Viestin lähettämisessä tapahtui virhe. Yritä uudelleen myöhemmin.", 'contact-form-7' ),
+		),
+
+		'accept_terms' => array(
+			'description'
+				=> __( "There are terms that the sender must accept", 'contact-form-7' ),
+			'default'
+				=> __( "Sinun on hyväksyttävä ehdot ennen viestin lähettämistä.", 'contact-form-7' ),
+		),
+
+		'invalid_required' => array(
+			'description'
+				=> __( "There is a field that the sender must fill in", 'contact-form-7' ),
+			'default'
+				=> __( "Kenttä on pakollinen.", 'contact-form-7' ),
+		),
+
+		'invalid_too_long' => array(
+			'description'
+				=> __( "There is a field with input that is longer than the maximum allowed length", 'contact-form-7' ),
+			'default'
+				=> __( "Kenttä on liian pitkä.", 'contact-form-7' ),
+		),
+
+		'invalid_too_short' => array(
+			'description'
+				=> __( "There is a field with input that is shorter than the minimum allowed length", 'contact-form-7' ),
+			'default'
+				=> __( "Kenttä on liian lyhyt.", 'contact-form-7' ),
+		),
+
+		'invalid_date' => array(
+			'description' => __( "Date format that the sender entered is invalid", 'contact-form-7' ),
+			'default' => __( "Päivämäärän muoto on väärä.", 'contact-form-7' )
+		),
+
+		'date_too_early' => array(
+			'description' => __( "Date is earlier than minimum limit", 'contact-form-7' ),
+			'default' => __( "Päivämäärä on ennen aikaisinta sallittua.", 'contact-form-7' )
+		),
+
+		'date_too_late' => array(
+			'description' => __( "Date is later than maximum limit", 'contact-form-7' ),
+			'default' => __( "Päivämäärä on viimeisimmän sallitun päivämäärän jälkeen.", 'contact-form-7' )
+		),
+
+		'upload_failed' => array(
+			'description' => __( "Uploading a file fails for any reason", 'contact-form-7' ),
+			'default' => __( "Tiedoston lataamisessa tapahtui tuntematon virhe.", 'contact-form-7' )
+		),
+
+		'upload_file_type_invalid' => array(
+			'description' => __( "Uploaded file is not allowed for file type", 'contact-form-7' ),
+			'default' => __( "Sinulla ei ole oikeutta ladata tämän tyyppisiä tiedostoja.", 'contact-form-7' )
+		),
+
+		'upload_file_too_large' => array(
+			'description' => __( "Uploaded file is too large", 'contact-form-7' ),
+			'default' => __( "Tiedosto on liian suuri.", 'contact-form-7' )
+		),
+
+		'upload_failed_php_error' => array(
+			'description' => __( "Uploading a file fails for PHP error", 'contact-form-7' ),
+			'default' => __( "Tiedoston lähettämisessä tapahtui virhe.", 'contact-form-7' )
+		),
+
+		'invalid_number' => array(
+			'description' => __( "Number format that the sender entered is invalid", 'contact-form-7' ),
+			'default' => __( "Numeromuoto on virheellinen.", 'contact-form-7' )
+		),
+
+		'number_too_small' => array(
+			'description' => __( "Number is smaller than minimum limit", 'contact-form-7' ),
+			'default' => __( "Luku on pienempi kuin sallittu vähimmäismäärä.", 'contact-form-7' )
+		),
+
+		'number_too_large' => array(
+			'description' => __( "Number is larger than maximum limit", 'contact-form-7' ),
+			'default' => __( "Lukumäärä on suurempi kuin suurin sallittu.", 'contact-form-7' )
+		),
+
+		'quiz_answer_not_correct' => array(
+			'description' =>
+				__( "Sender doesn't enter the correct answer to the quiz", 'contact-form-7' ),
+			'default' =>
+				__( "Vastaus tietokilpailuun on väärä.", 'contact-form-7' ),
+		),
+
+		'captcha_not_match' => array(
+			'description' =>
+				__( "The code that sender entered does not match the CAPTCHA", 'contact-form-7' ),
+			'default' =>
+				__( 'Antamasi koodi on väärä.', 'contact-form-7' ),
+		),
+
+		'invalid_email' => array(
+			'description' =>
+				__( "Email address that the sender entered is invalid", 'contact-form-7' ),
+			'default' =>
+				__( "Annettu sähköpostiosoite on virheellinen.", 'contact-form-7' ),
+		),
+
+		'invalid_url' => array(
+			'description' =>
+				__( "URL that the sender entered is invalid", 'contact-form-7' ),
+			'default' =>
+				__( "URL on virheellinen.", 'contact-form-7' ),
+		),
+
+		'invalid_tel' => array(
+			'description' =>
+				__( "Telephone number that the sender entered is invalid", 'contact-form-7' ),
+			'default' =>
+				__( "Puhelinnumero on virheellinen.", 'contact-form-7' ),
+		)
+	);
+	return $messages; 
+}; 
+
+add_filter('wpcf7_messages', 'filter_wpcf7_messages' , 11, 0); 
+
+// Check if PostMan Plugin is installed and activated
 function postman_import_settings() {
 	if ( is_plugin_active( 'post-smtp/postman-smtp.php' ) ) {
 		/**
