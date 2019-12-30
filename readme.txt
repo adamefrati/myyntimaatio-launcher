@@ -4,7 +4,7 @@ Donate link: https://linkedin.com/in/shayanabbas
 Tags: myyntimaatio, startup plugins, plugins, 
 Requires at least: 5.1
 Tested up to: 5.2.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,13 @@ So that I can answer here.
 
 
 == Changelog ==
+
+= 1.0.1 =
+* Configuration added to remove extra themes when Wordpress(FI) Settings applies from plugin settings.
+* Added Soumi language text for contact form 7 error/messages feature.
+* Fixed PostMan (post-smtp) plugin import settings.
+* Added Myyntimaatio icon on admin menu.
+* Added Advanced Custom Fields PRO with license and default ACF plugin removed.
 
 = 1.0.0 =
 * Version released.
