@@ -459,6 +459,12 @@ function ithemes_security_import_settings() {
 			'post_logout_slug' 	=> "",
 		);
 		ITSEC_Modules::set_settings( 'hide-backend', $data );
+
+		// Set default notification to first user (admin) only
+		$get_notification = ITSEC_Modules::get_settings( 'notification-center' );
+		$get_notification['default_recipients']['user_list'] = array( '1' );
+		ITSEC_Modules::set_settings( 'notification-center', $get_notification );
+		
 	}
 }
 
