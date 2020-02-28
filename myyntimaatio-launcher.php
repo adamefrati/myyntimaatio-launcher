@@ -556,6 +556,12 @@ add_action('admin_menu', 'ml_register_options_page');
 
 add_action ('wp_loaded', 'ml_options_callback');
 
+// Flush rewrite rules
+function flush_the_htaccess_file() {
+    global $wp_rewrite;
+    $wp_rewrite->flush_rules();
+}
+
 function ml_options_callback() {
 	$url = '/admin.php?page=myyntimaatio-launcher';
     if( isset($_GET['postman_import']) ) {
@@ -587,6 +593,9 @@ function ml_options_callback() {
 			foreach ($directories as $dir) {
 				delete_files($dir);
 			}
+
+			// Flush the rewrite rules
+			add_action('admin_init', 'flush_the_htaccess_file');
 
 			wp_redirect( admin_url( $url ) );
 		}
