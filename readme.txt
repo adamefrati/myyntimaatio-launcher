@@ -3,8 +3,8 @@ Contributors: ministryofcoders
 Donate link: https://linkedin.com/in/shayanabbas
 Tags: myyntimaatio, startup plugins, plugins, 
 Requires at least: 5.1
-Tested up to: 5.2.4
-Stable tag: 1.0.1
+Tested up to: 5.3.2
+Stable tag: 1.0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,10 @@ So that I can answer here.
 
 
 == Changelog ==
+
+= 1.0.2 =
+* Set only "myyntimaatio" user to receive iThemes security plugin notifications.
+* Write .htaccess file with permalinks setting on importing WordPress settings.
 
 = 1.0.1 =
 * Configuration added to remove extra themes when Wordpress(FI) Settings applies from plugin settings.

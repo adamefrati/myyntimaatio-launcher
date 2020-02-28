@@ -8,14 +8,14 @@
  * that starts the plugin.
  *
  * @link              https://linkedin.com/in/shayanabbas
- * @since             1.0.1
+ * @since             1.0.2
  * @package           Myyntimaatio Launcher
  *
  * @wordpress-plugin
  * Plugin Name:       Myyntimaatio Launcher
  * Plugin URI:        https://myyntimaatio.fi
  * Description:       Myyntimaatio Launcher plugin to install all required plugins and run all neccessary snippets according to company standard.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Shayan Abbas
  * Author URI:        https://linkedin.com/in/shayanabbas
  * License:           GPL-3.0+
