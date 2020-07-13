@@ -4,7 +4,7 @@ Donate link: https://linkedin.com/in/shayanabbas
 Tags: myyntimaatio, startup plugins, plugins,
 Requires at least: 5.1
 Tested up to: 5.3.2
-Stable tag: 1.0.2
+Stable tag: 1.0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,9 @@ So that I can answer here.
 
 
 == Changelog ==
+
+= 1.0.4 =
+* Small tweaks.
 
 = 1.0.3 =
 * Change plugin to receive updates from another user.
