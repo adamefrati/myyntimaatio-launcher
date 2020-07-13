@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: ministryofcoders
 Donate link: https://linkedin.com/in/shayanabbas
-Tags: myyntimaatio, startup plugins, plugins, 
+Tags: myyntimaatio, startup plugins, plugins,
 Requires at least: 5.1
 Tested up to: 5.3.2
 Stable tag: 1.0.2
@@ -22,8 +22,8 @@ After Installation and Activation visit Myyntimaatio Menu on left side to import
 * Cookie Consent - Myyntimaatio
 * Elementor Page Builder
 * Elementor Page Builder Pro
-* Redirection By John Godley 
-* WP Fastest Cache By Emre Vona 
+* Redirection By John Godley
+* WP Fastest Cache By Emre Vona
 * Yoast SEO By Team Yoast
 * iThemes Security
 * Advanced Custom Fields PRO By Elliot Condon
@@ -51,6 +51,9 @@ So that I can answer here.
 
 
 == Changelog ==
+
+= 1.0.3 =
+* Change plugin to receive updates from another user.
 
 = 1.0.2 =
 * Set only "myyntimaatio" user to receive iThemes security plugin notifications.

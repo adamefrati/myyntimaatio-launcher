@@ -7,7 +7,7 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://linkedin.com/in/shayanabbas
+ * @link              https://myyntimaatio.fi
  * @since             1.0.2
  * @package           Myyntimaatio Launcher
  *
@@ -16,8 +16,8 @@
  * Plugin URI:        https://myyntimaatio.fi
  * Description:       Myyntimaatio Launcher plugin to install all required plugins and run all neccessary snippets according to company standard.
  * Version:           1.0.2
- * Author:            Shayan Abbas
- * Author URI:        https://linkedin.com/in/shayanabbas
+ * Author:            Myyntimaatio
+ * Author URI:        https://myyntimaatio.fi
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       myyntimaatio-launcher
@@ -39,7 +39,7 @@ require_once plugin_basename( '/plugin-update-checker/plugin-update-checker.php'
 
 // Adding plugin autoupdate feature
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://github.com/shayanabbas/myyntimaatio-launcher/',
+	'https://github.com/ripodi/myyntimaatio-launcher',
 	__FILE__,
 	'myyntimaatio-launcher'
 );
@@ -64,7 +64,7 @@ function myyntimaatio_register_required_plugins() {
 		array(
 			'name'      => 'Cookie Consent - Myyntimaatio',
 			'slug'      => 'mm-cookie-consent-europe',
-			'source'    => 'https://github.com/shayanabbas/mm-cookie-consent-europe/archive/master.zip',
+			'source'    => 'https://github.com/ripodi/mm-cookie-consent-europe/archive/master.zip',
 			'required'  => true, // If false, the plugin is only 'recommended' instead of required.
 		),
 
@@ -120,14 +120,14 @@ function myyntimaatio_register_required_plugins() {
 			'slug'      => 'wp-fastest-cache',
 			'required'  => true,
 		),
-		
+
 		// Yoast SEO By Team Yoast
 		array(
 			'name'      => 'Yoast SEO By Team Yoast',
 			'slug'      => 'wordpress-seo',
 			'required'  => true,
 		),
-		
+
 		// Redirection By John Godley
 		array(
 			'name'      => 'Redirection By John Godley',
@@ -264,8 +264,8 @@ function myyntimaatio_register_required_plugins() {
 }
 
 
-// define the filter_wpcf7_messages callback 
-function filter_wpcf7_messages() { 
+// define the filter_wpcf7_messages callback
+function filter_wpcf7_messages() {
     // translating EN CF7 messages to Soumi
     	$messages = array(
 		'mail_sent_ok' => array(
@@ -409,10 +409,10 @@ function filter_wpcf7_messages() {
 				__( "Puhelinnumero on virheellinen.", 'contact-form-7' ),
 		)
 	);
-	return $messages; 
-}; 
+	return $messages;
+};
 
-add_filter('wpcf7_messages', 'filter_wpcf7_messages' , 11, 0); 
+add_filter('wpcf7_messages', 'filter_wpcf7_messages' , 11, 0);
 
 // Check if PostMan Plugin is installed and activated
 function postman_import_settings() {
@@ -445,13 +445,13 @@ function postman_import_settings() {
 // Check if Better WP security(iThemes Security) Plugin is installed and activated
 function ithemes_security_import_settings() {
 	if ( is_plugin_active( 'better-wp-security/better-wp-security.php' ) ) {
-		
+
 		/**
 		 * Include the Better WP security(iThemes Security) core class.
 		 */
 		require_once(plugin_dir_path( __DIR__ ) . 'better-wp-security/core/core.php');
 
-		$data = array(  
+		$data = array(
 			'enabled' 			=> true,
 			'slug'				=> "kirjautuminen",
 			'theme_compat' 		=> true,
@@ -464,7 +464,7 @@ function ithemes_security_import_settings() {
 		$get_notification = ITSEC_Modules::get_settings( 'notification-center' );
 		$get_notification['default_recipients']['user_list'] = array( '1' );
 		ITSEC_Modules::set_settings( 'notification-center', $get_notification );
-		
+
 	}
 }
 
@@ -510,20 +510,20 @@ function wp_acf_pro_license_import_settings() {
 		if( $response['status'] == 1 ) {
 			// Update license.
 			acf_pro_update_license( $response['license'] );
-			
+
 			// Refresh plugins transient to fetch new update data.
 			acf_updates()->refresh_plugins_transient();
-			
+
 			// Show notice.
 			acf_add_admin_notice( $response['message'], 'success' );
-		
-		// On failure.	
+
+		// On failure.
 		}
 	}
 }
 
 function ml_register_settings() {
-	
+
 	add_option( 'ml_option_name', '' );
 	add_option( 'wp_before_head', '' );
 	add_option( 'wp_before_body', '' );
@@ -537,7 +537,7 @@ function ml_register_settings() {
 	register_setting( 'ml_options_group', 'wp_button_text_color');
 	register_setting( 'ml_options_group', 'wp_before_head');
 	register_setting( 'ml_options_group', 'wp_before_body');
-	
+
 }
 add_action( 'admin_init', 'ml_register_settings' );
 
@@ -548,9 +548,9 @@ function mm_global_styles()
 add_action('admin_enqueue_scripts', 'mm_global_styles', 100);
 
 function ml_register_options_page() {
-	
+
 	add_menu_page( 'Myyntimaatio', 'Myyntimaatio',  'manage_options', 'myyntimaatio-launcher', 'ml_options_page', plugins_url( 'assets/img/LOGO_Myyntimaatio_circle.png', __FILE__ ) );
-	
+
 }
 add_action('admin_menu', 'ml_register_options_page');
 
@@ -613,10 +613,10 @@ function ml_options_callback() {
 		}
 	}
 
-}     
+}
 
 function ml_options_page()
-{	
+{
 	wp_enqueue_script('jquery');
 	wp_enqueue_media();
 	wp_enqueue_style( 'wp-color-picker' );
@@ -640,10 +640,10 @@ function ml_options_page()
 	<li><a href="#header_footer">Header/Footer</a></li>
   </ul>
   <div class="wp-tab-panel" id="general">
-	
+
 	<fieldset>
 	  <legend><?php _e("Configuration"); ?></legend>
-	  
+
 	  <table>
 	  <?php
 	  	//Wordpress Settings
@@ -678,7 +678,7 @@ function ml_options_page()
 	  	<th scope="row">Postman (<?php _e($ml_postman_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&postman_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
-	  <?php 
+	  <?php
 		}
  	  ?>
 
@@ -696,7 +696,7 @@ function ml_options_page()
 	  	<th scope="row">iThemes Security (<?php _e($ml_ithemes_security_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&ithemes_security_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
-	  <?php 
+	  <?php
 		}
  	  ?>
 
@@ -714,7 +714,7 @@ function ml_options_page()
 	  	<th scope="row">WP Fastest Cache (<?php _e($ml_wp_fastest_cache_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&wp_fastest_cache_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
-	  <?php 
+	  <?php
 		}
  	  ?>
 
@@ -732,14 +732,14 @@ function ml_options_page()
 	  	<th scope="row">ACF License PRO (<?php _e($ml_acf_pro_license_import); ?>)</th>
 		  <td><a href="./admin.php?page=myyntimaatio-launcher&acf_pro_license_import=true"><span class="dashicons dashicons-update-alt"></span></a></td>
 	  </tr>
-	  <?php 
+	  <?php
 		}
  	  ?>
 	  </table>
     </fieldset>
   </div>
   <div class="wp-tab-panel" id="login" style="display: none;">
-	
+
   	<fieldset>
 	  <legend><?php _e("Login Page"); ?></legend>
 			<table class="form-table">
@@ -754,7 +754,7 @@ function ml_options_page()
 				<tr valign="top">
 					<th scope="row">Height</th>
 					<td>
-						<input type="text" name="wp_logo_height" value="<?php echo esc_attr( get_option('wp_logo_height') ); ?>" /> px					
+						<input type="text" name="wp_logo_height" value="<?php echo esc_attr( get_option('wp_logo_height') ); ?>" /> px
 					</td>
 				</tr>
 				<tr valign="top">
@@ -792,7 +792,7 @@ function ml_options_page()
   </div>
 
   <div class="wp-tab-panel" id="header_footer" style="display: none;">
-	
+
   	<fieldset>
 	  <legend><?php _e("Header/Footer"); ?></legend>
 			<table class="form-table">
@@ -820,7 +820,7 @@ function ml_options_page()
 	jQuery(document).ready(function($){
 		$('#upload-btn').click(function(e) {
 			e.preventDefault();
-			var image = wp.media({ 
+			var image = wp.media({
 				title: 'Upload Logo',
 				multiple: false
 			}).open()
@@ -858,7 +858,7 @@ function wordpress_custom_login_logo() {
 	if(empty($wp_logo_width))
 	{
 		$wp_logo_width='100%';
-	}	
+	}
 	else
 	{
 		$wp_logo_width.='px';
@@ -866,7 +866,7 @@ function wordpress_custom_login_logo() {
 	if(!empty($logo_url))
 	{
 		echo '<style type="text/css">'.
-             'h1 a { 
+             'h1 a {
 					background-image:url('.$logo_url.') !important;
 					height:'.$wp_logo_height.' !important;
 					width:'.$wp_logo_width.' !important;
@@ -911,7 +911,7 @@ function ml_wp_footer() {
 }
 add_action('wp_footer', 'ml_wp_footer');
 
-/* 
+/*
  * php delete function that deals with directories recursively
  */
 function delete_files($target) {
@@ -919,11 +919,11 @@ function delete_files($target) {
         $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned
 
         foreach( $files as $file ){
-            delete_files( $file );      
+            delete_files( $file );
         }
 
         rmdir( $target );
     } elseif(is_file($target)) {
-        unlink( $target );  
+        unlink( $target );
     }
 }
