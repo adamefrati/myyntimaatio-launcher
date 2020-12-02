@@ -8,14 +8,14 @@
  * that starts the plugin.
  *
  * @link              https://myyntimaatio.fi
- * @since             1.0.4
+ * @since             1.0.5
  * @package           Myyntimaatio Launcher
  *
  * @wordpress-plugin
  * Plugin Name:       Myyntimaatio Launcher
  * Plugin URI:        https://myyntimaatio.fi
  * Description:       Myyntimaatio Launcher plugin to install all required plugins and run all neccessary snippets according to company standard.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Author:            Myyntimaatio
  * Author URI:        https://myyntimaatio.fi
  * License:           GPL-3.0+
@@ -62,9 +62,8 @@ function myyntimaatio_register_required_plugins() {
 
 		// Cookie Consent Plugin
 		array(
-			'name'      => 'Cookie Consent - Myyntimaatio',
-			'slug'      => 'mm-cookie-consent-europe',
-			'source'    => 'https://github.com/ripodi/mm-cookie-consent-europe/archive/master.zip',
+			'name'      => 'Complianz – GDPR/CCPA Cookie Consent',
+			'slug'      => 'complianz-gdpr',
 			'required'  => true, // If false, the plugin is only 'recommended' instead of required.
 		),
 
@@ -105,6 +104,19 @@ function myyntimaatio_register_required_plugins() {
 			'slug'      => 'elementor-pro',
 			'source'    => dirname( __FILE__ ) . '/plugins/elementor-pro.zip', // The plugin source.
 			'required'  => true,
+		),
+
+		// Essential Addons
+		array(
+			'name'      => 'Essential Addons for Elementor',
+			'slug'      => 'essential-addons-for-elementor-lite',
+		),
+		
+		// Essential Addons Pro
+		array(
+			'name'      => 'Essential Addons for Elementor Pro',
+			'slug'      => 'essential-addons-for-elementor-pro',
+			'source'	=> dirname( __FILE__ ) . '/plugins/essential-addons-elementor.zip', // The plugin source.
 		),
 
 		// iThemes Security
@@ -158,6 +170,19 @@ function myyntimaatio_register_required_plugins() {
 			'name'      => 'Elementor Contact Form DB By Sean Barton',
 			'slug'      => 'sb-elementor-contact-form-db',
 		),
+
+		// Polylang
+		array(
+			'name'      => 'Polylang',
+			'slug'      => 'polylang',
+		),
+
+		// Polylang Connect for Elementor
+		// Before recommending, check if Polylang installed
+		array(
+			'name'      => 'Polylang Connect for Elementor',
+			'slug'      => 'connect-polylang-elementor',
+		),		
 
 	);
 
@@ -522,6 +547,13 @@ function wp_acf_pro_license_import_settings() {
 	}
 }
 
+// Check if Essential Addons Pro is installed and activated
+function wp_essential_addons_pro_license_import_settings() {
+	if ( is_plugin_active( 'essential-addons-for-elementor-pro/essential_adons_elementor.php ' ) ) {
+		require_once(plugin_dir_path( __DIR__ ) . 'essential-addons-for-elementor-pro/essential_adons_elementor.php');
+	}
+}
+
 function ml_register_settings() {
 
 	add_option( 'ml_option_name', '' );
@@ -612,7 +644,12 @@ function ml_options_callback() {
 			wp_redirect( admin_url( $url ) );
 		}
 	}
-
+	if( isset($_GET['wp_essential_addons_pro_license_import']) ) {
+		if( $_GET['wp_essential_addons_pro_license_import'] == 'true' ) {
+			wp_essential_addons_pro_license_import_settings($Eael_Licensing);
+			wp_redirect( admin_url( $url ) );
+		}
+	}
 }
 
 function ml_options_page()
@@ -718,7 +755,49 @@ function ml_options_page()
 		}
  	  ?>
 
+ 	  <?php
+	  	// EAEL / Essential Addons Settings
+ 		if ( is_plugin_active( 'essential-addons-for-elementor-pro/essential_adons_elementor.php' ) ) {
+			
+			require_once(plugin_dir_path( __DIR__ ) . 'essential-addons-for-elementor-pro/essential_adons_elementor.php');
+			
+			/* Init class */
+			$product_slug	= 'essential-addons-elementor';
+			$text_domain	= 'essential-addons-elementor';
+			$product_name	= 'Essential Addons for Elementor';
+			$get_settings_page_slug = 'eael-settings';
+			$license_key	= 'e105223b7cc5ec9dc9cebe3ab90e89ce';
+			$Eael_Licensing = new Essential_Addons_Elementor\Pro\Classes\Eael_Licensing($product_slug, $text_domain, $product_name);
+			
+			/* Set up button and get licensedata */
+			$Eael_Licensing->set_license_key($license_key);
+			$licenseData = $Eael_Licensing->get_license_status();
+			$customOnClick = "document.getElementById('eael-submit').click()";
 
+			/* Creating necessary fields for the button to activate properly*/
+			?>
+			<div style="display:none;">
+					<?php settings_fields( 'eael-settings' ); ?>
+					<input <?php echo ( $status !== false && $status == 'valid' ) ? 'disabled' : ''; ?> id="<?php echo $product_slug; ?>-license-key" name="<?php echo $product_slug; ?>-license-key" type="text" class="regular-text" value="<?php echo ( $Eael_Licensing->get_license_key() ); ?>"" placeholder="Place Your License Key and Activate" />
+					<input type="hidden" name="<?php echo $product_slug ?>_license_activate" />
+					<?php wp_nonce_field( $product_slug . '_license_nonce', $product_slug . '_license_nonce' ); ?>
+					<?php submit_button( __( 'Activate License', $text_domain ), 'eael-license-activation-btn', 'eael-submit', false, array( 'class' => 'button button-primary' ) ); ?>
+			</div>
+			<?php
+
+			if ( $licenseData != 'valid') $wp_essential_addons_pro_license_import = '<span style="color:red;">Not Configured</span>';
+			else $wp_essential_addons_pro_license_import = '<span style="color:green;">Configured</span>';
+
+ 	  ?>
+	  <tr valign="top">
+	  	<th scope="row">Essential Addons (<?php _e($wp_essential_addons_pro_license_import); ?>)</th>
+		  	<td><a href="#" id="submit" name="submit"><span onclick="<?php echo $customOnClick ?>" class="dashicons dashicons-update-alt"></span></a></td>
+	  </tr>
+	  <?php
+		}
+ 	  ?>
+		  
+		  
  	  <?php
 	  	//Advanced Custom Fields PRO Settings
  		if ( is_plugin_active( 'advanced-custom-fields-pro/acf.php' ) ) {
