@@ -7,17 +7,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://myyntimaatio.fi
- * @since             1.0.5
- * @package           Myyntimaatio Launcher
+ * @link              https://maatio.fi
+ * @since             1.0.6
+ * @package           Maatio Launcher
  *
  * @wordpress-plugin
- * Plugin Name:       Myyntimaatio Launcher
- * Plugin URI:        https://myyntimaatio.fi
- * Description:       Myyntimaatio Launcher plugin to install all required plugins and run all neccessary snippets according to company standard.
- * Version:           1.0.5
- * Author:            Myyntimaatio
- * Author URI:        https://myyntimaatio.fi
+ * Plugin Name:       Maatio Launcher
+ * Plugin URI:        https://maatio.fi
+ * Description:       Maatio Launcher plugin to install all required plugins and run all neccessary snippets according to company standard.
+ * Version:           1.0.6
+ * Author:            Maatio
+ * Author URI:        https://maatio.fi
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       myyntimaatio-launcher
@@ -83,13 +83,6 @@ function myyntimaatio_register_required_plugins() {
 			'required'  => true,
 		),
 
-		// Advanced Custom Field PRO Extension
-		array(
-			'name'      => 'Advanced Custom Fields PRO By Elliot Condon',
-			'slug'      => 'advanced-custom-fields-pro',
-			'source'    => dirname( __FILE__ ) . '/plugins/advanced-custom-fields-pro.zip', // The plugin source.
-		),
-
 		// Elementor
 		array(
 			'name'      => 'Elementor Page Builder',
@@ -147,22 +140,38 @@ function myyntimaatio_register_required_plugins() {
 			'required'  => true,
 		),
 
-		// Post SMTP Mailer/Email Log
+		// Advanced Custom Field PRO Extension
 		array(
-			'name'      => 'Post SMTP Mailer/Email Log',
-			'slug'      => 'post-smtp',
-		),
-
-		// Contact Form 7
-		array(
-			'name'      => 'Contact Form 7 Takayuki Miyoshi',
-			'slug'      => 'contact-form-7',
+			'name'      => 'Advanced Custom Fields PRO By Elliot Condon',
+			'slug'      => 'advanced-custom-fields-pro',
+			'source'    => dirname( __FILE__ ) . '/plugins/advanced-custom-fields-pro.zip', // The plugin source.
 		),
 
 		// Flamingo By Takayuki Miyoshi
 		array(
 			'name'      => 'Flamingo By Takayuki Miyoshi',
 			'slug'      => 'flamingo',
+		),
+		
+		// Post SMTP Mailer/Email Log
+		array(
+			'name'      => 'Post SMTP Mailer/Email Log',
+			'slug'      => 'post-smtp',
+		),
+
+		// WS Form PRO
+		array(
+			'name'      => 'WS Form PRO',
+			'slug'      => 'ws-form',
+			'source'    => dirname( __FILE__ ) . '/plugins/ws-form-pro.zip', // The plugin source.
+		),
+		
+
+		/* NOT IN USE AS OF 14 FEB. 2022 / 1.06	
+		// Contact Form 7
+		array(
+			'name'      => 'Contact Form 7 Takayuki Miyoshi',
+			'slug'      => 'contact-form-7',
 		),
 
 		// Elementor Contact Form DB By Sean Barton - Tortoise IT
@@ -182,7 +191,7 @@ function myyntimaatio_register_required_plugins() {
 		array(
 			'name'      => 'Polylang Connect for Elementor',
 			'slug'      => 'connect-polylang-elementor',
-		),		
+		),	*/	
 
 	);
 
@@ -459,7 +468,7 @@ function postman_import_settings() {
 		assert( $postmanState ['version'] == $data ['version'] );
 
 		// If settings are not imported already
-		if( PostmanOptions::getInstance()->getUsername() != 'contactforms@myyntimaatio.fi' ) {
+		if ( PostmanOptions::getInstance()->getUsername() != 'contactforms@myyntimaatio.fi' ) {
 			//Importing default configuration of Myyntimaatio SMTP account.
 			update_option( 'postman_state', $postmanState );
 			update_option( PostmanOptions::POSTMAN_OPTIONS, $data );
@@ -581,7 +590,7 @@ add_action('admin_enqueue_scripts', 'mm_global_styles', 100);
 
 function ml_register_options_page() {
 
-	add_menu_page( 'Myyntimaatio', 'Myyntimaatio',  'manage_options', 'myyntimaatio-launcher', 'ml_options_page', plugins_url( 'assets/img/LOGO_Myyntimaatio_circle.png', __FILE__ ) );
+	add_menu_page( 'Maatio', 'Maatio',  'manage_options', 'myyntimaatio-launcher', 'ml_options_page', plugins_url( 'assets/img/LOGO_Myyntimaatio_circle.png', __FILE__ ) );
 
 }
 add_action('admin_menu', 'ml_register_options_page');
@@ -666,7 +675,7 @@ function ml_options_page()
 ?>
 <div id="myyntimaatio_launcher">
   <?php screen_icon(); ?>
-  <h2><?php _e("Myyntimaatio Launcher"); ?></h2>
+  <h2><?php _e("Maatio Launcher"); ?></h2>
   <form method="post" action="options.php">
   <?php settings_fields( 'ml_options_group' ); ?>
 
